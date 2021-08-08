@@ -1,0 +1,102 @@
+﻿@model DAL.ViewModels.ContactViewModel
+
+@{
+    ViewData["Title"] = Model != null ? "Edit" : "Create";
+}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item"> <a href="~/Admin/Contact/Create" class="nav-link active">Add</a> </li>
+    <li class="nav-item"> <a href="~/Admin/Contact/Index" class="nav-link">View</a> </li>
+
+</ul>
+<div class="Card">
+    <div class="col-md-4">
+        <form enctype="multipart/form-data" asp-action="@ViewData["Title"]">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="ContactId" />
+                <input type="hidden" asp-for="ExistingImage" />
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control"  maxlength="200" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Designation" class="control-label"></label>
+                <input asp-for="Designation" class="form-control" />
+                <span asp-validation-for="Designation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mobile" class="control-label"></label>
+                <input asp-for="Mobile" class="form-control" maxlength="10"/>
+                <span asp-validation-for="Mobile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" id="radioIRYes" value="Male" asp-for="Gender">
+                    <label class="custom-control-label" for="radioIRYes">Male</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" id="radioIRNo" value="Female" asp-for="Gender">
+                    <label class="custom-control-label" for="radioIRNo">Female</label>
+                </div>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <select class="form-control" asp-for="Country"> 
+                    <option value="India">India</option>
+                    <option value="China">China</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                </select>
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfileImage" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="ProfileImage" class="custom-file-input" id="customFile" accept="image/*">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+                <span id="ProfileImage"  class="text-danger"></span>
+                <div>
+                    @{
+                        if (Model != null && !string.IsNullOrEmpty(Model.ExistingImage))
+                        {
+                            <img src="~/images/@Model.ExistingImage"
+                                 class="rounded-circle"
+                                 height="40" width="40"
+                                 asp-append-version="true" />
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input id="submit" type="submit" value="Submit" class="btn btn-sm btn-primary rounded-0 text-uppercase" />
+                 
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+        $("#submit").val($("#ContactId").val() != "" ? "Update" : "Submit");
+        //$("#submit").click(function () {
+
+        //    debugger;
+        //    if ($("#ContactId").val() == "" && $("#customFile").val() == "") {
+        //        $("#ProfileImage").val('Please choose profile image');
+        //        return false;
+        //    }
+        //});
+    </script>
+}

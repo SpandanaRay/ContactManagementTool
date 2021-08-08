@@ -1,0 +1,92 @@
+﻿@model Repositories.Models.PagingModel<Repositories.Models.ContactModel>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Common;
+
+@{
+    ViewData["Title"] = "Display Data";
+}
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item"> <a href="~/Admin/Contact/Create" class="nav-link">Add</a> </li>
+    <li class="nav-item"> <a href="~/Admin/Contact/Index" class="nav-link active">View</a> </li>
+
+</ul>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Gender</th>
+            <th>Designation</th>
+            <th>Mobile</th>
+            <th>Country</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contact in Model.Data)
+        {
+            <tr>
+                <td>
+                    <img src="~/images/@contact.Image"
+                         class="rounded-circle"
+                         height="40" width="40"
+                         asp-append-version="true" />
+                    @contact.Name
+                </td>
+                <td>@contact.Gender</td>
+                <td>@contact.Designation</td>
+                <td>@contact.Mobile</td>
+                <td>@contact.Country</td>
+                <td>                   
+                    @Html.ActionLink("Edit", "Edit", new { id = contact.ContactId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = contact.ContactId }, new { onclick = "return confirm('Are you sure to delete?')" })
+                </td>
+            </tr>
+
+        }
+        <tr>
+            <td colspan="6">
+                @Html.PagedListPager((IPagedList)Model.Data, page => Url.Action("Index", new
+           {
+               page = page,
+               pageSize = Model.PageSize
+           }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+            </td>
+        </tr>
+    </tbody>
+</table>
+<style>
+    /* pagination */
+    .pagination > li.disabled {
+        opacity: .5;
+    }
+
+    .pagination > li {
+        margin: 0 4px;
+        display: inline-block;
+    }
+
+    .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+        color: #fff;
+        background-color: #f54b5b;
+        border-color: #fff;
+        cursor: default;
+    }
+
+    .pagination > li > a, .pagination > li > span {
+        width: 40px;
+        height: 40px;
+        line-height: 38px;
+        text-align: center;
+        font-size: 18px;
+        z-index: 1;
+        position: relative;
+        background-color: #2196f3;
+        color: #fff;
+        border: 1px solid #fff;
+        cursor: pointer;
+        display: inline-block;
+    }
+</style>
+
